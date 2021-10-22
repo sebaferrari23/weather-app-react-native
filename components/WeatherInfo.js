@@ -1,8 +1,5 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
-import { colors } from '../utils/index'
-
-const { PRIMARY_COLOR, SECONDARY_COLOR } = colors
 
 export default function WeatherInfo({ currentWeather }) {
 
@@ -19,9 +16,13 @@ export default function WeatherInfo({ currentWeather }) {
 
   return (
     <View style={styles.weatherInfo}>
-      <Text>{name}</Text>
       <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
-      <Text style={styles.textPrimary}>{temp}</Text>
+      <View style={styles.weatherDegrees}>
+        <Text style={styles.textPrimary}>
+          {temp.toFixed(0)}
+        </Text>
+        <Text style={styles.textSmall}>°</Text>
+      </View>
       <Text style={styles.weatherDescription}>{description}</Text>
       <Text style={styles.textSecondary}>{main}</Text>
     </View>
@@ -30,23 +31,46 @@ export default function WeatherInfo({ currentWeather }) {
 
 const styles = StyleSheet.create({
   weatherInfo: {
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,.04)',
+    borderRadius: 20,
+    margin: 16,
+    position: 'relative',
+    paddingTop: 80,
+    paddingBottom: 50,
   },
   weatherDescription: {
     textTransform: 'capitalize',
+    color: '#fff',
+    opacity: 0.5,
+    fontSize: 13,
+    fontStyle: 'italic'
   },
   weatherIcon: {
-    width: 100,
-    height: 100
+    position: 'absolute',
+    top: -80,
+    width: 200,
+    height: 200
+  },
+  weatherDegrees: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginRight: -20
   },
   textPrimary: {
-    fontSize: 40,
-    color: PRIMARY_COLOR
+    fontSize: 90,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  textSmall: {
+    fontSize: 50,
+    lineHeight: 90,
+    color: '#fff'
   },
   textSecondary: {
     fontSize: 20,
-    color: SECONDARY_COLOR,
-    fontWeight: '500',
+    color: '#fff',
     marginTop: 10
   },
 })

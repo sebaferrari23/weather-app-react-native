@@ -52,7 +52,7 @@ export default function App() {
   if(currentWeather) {
     return (
       <View style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="inverted" />
         <View style={styles.main}>
           <WeatherInfo currentWeather={currentWeather} />
         </View>
@@ -62,7 +62,7 @@ export default function App() {
     return (
       <View style={styles.container}>
         <Text>{errorMessage}</Text>
-        <StatusBar style="auto" />
+        <StatusBar style="inverted" />
       </View>
     )
   }
@@ -71,7 +71,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#020916',
     justifyContent: 'center',
   },
   main: {
