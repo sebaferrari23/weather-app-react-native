@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
+import WeatherInfo from './components/WeatherInfo';
 import Constants from 'expo-constants';
 import { WEATHER_API_KEY } from '@env';
 
@@ -49,11 +50,12 @@ export default function App() {
   }
 
   if(currentWeather) {
-    const { main : {temp} } = currentWeather
     return (
       <View style={styles.container}>
-        <Text>{temp}</Text>
         <StatusBar style="auto" />
+        <View style={styles.main}>
+          <WeatherInfo currentWeather={currentWeather} />
+        </View>
       </View>
     );
   } else {
@@ -70,7 +72,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
   },
+  main: {
+    justifyContent: 'center',
+    flex: 1,
+  }
 });
