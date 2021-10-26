@@ -1,10 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import * as Location from 'expo-location';
-import WeatherInfo from './components/WeatherInfo';
-import Constants from 'expo-constants';
-import { WEATHER_API_KEY } from '@env';
+import { StatusBar } from 'expo-status-bar'
+import React, { useEffect, useState } from 'react'
+import { Platform, Text } from 'react-native'
+import { ThemeProvider } from 'styled-components'
+import * as Location from 'expo-location'
+import Weather from './components/Weather'
+import Header from './components/Header'
+import Constants from 'expo-constants'
+import { WEATHER_API_KEY } from '@env'
+import { darkTheme, lightTheme } from './constants/themes'
+import { Layout } from './styled'
 
 const BASE_WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather?'
 
@@ -13,12 +17,17 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState(null)
   const [currentWeather, setCurrentWeather] = useState(null)
   const [unitStystem, setUnitStystem] = useState('metric')
+  const [darkMode, setDarkMode] = useState(false);  
+
+  const toggleDarkMode = () => {
+    setDarkMode(previousState => !previousState);
+  }
 
   useEffect(() => {
-    load()
+    fetchWeather()
   }, [])
 
-  const load = async () => {
+  const fetchWeather = async () => {
     try {
       if (Platform.OS === 'android' && !Constants.isDevice) {
         setErrorMessage(
@@ -49,33 +58,20 @@ export default function App() {
     }
   }
 
-  if(currentWeather) {
-    return (
-      <View style={styles.container}>
-        <StatusBar style="inverted" />
-        <View style={styles.main}>
-          <WeatherInfo currentWeather={currentWeather} />
-        </View>
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        <Text>{errorMessage}</Text>
-        <StatusBar style="inverted" />
-      </View>
-    )
-  }
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      { currentWeather ? (
+          <Layout>
+            <Header darkMode={darkMode} onSwitchChange={toggleDarkMode} city={currentWeather.name} />
+            <Weather darkMode={darkMode} currentWeather={currentWeather} />
+          </Layout>
+        ) : (
+          <Layout>
+            <Text>{errorMessage}</Text>
+            <StatusBar style={darkMode ? 'inverted' : 'auto'} />
+          </Layout>
+        )
+      }
+    </ThemeProvider>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#020916',
-    justifyContent: 'center',
-  },
-  main: {
-    justifyContent: 'center',
-    flex: 1,
-  }
-});
